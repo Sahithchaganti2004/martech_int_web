@@ -1,14 +1,13 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import requests
 import json
-import os
+import random
 
 # ---------------------------------------------------------
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="KIA MOTORS | Next-Gen Mobility Experience",
+    page_title="KIA MOTORS | Next-Gen Mobility",
     page_icon="🚘",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -42,15 +41,6 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
     }
     
-    .glass-card {
-        background: rgba(17, 24, 39, 0.75);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 1.8rem;
-        margin-bottom: 1.5rem;
-    }
-    
     .stButton>button {
         border-radius: 50px !important;
         font-weight: 800 !important;
@@ -81,97 +71,125 @@ with col_title:
 st.divider()
 
 # Sidebar Navigation
-st.sidebar.title("🚘 Experience Modules")
-module_choice = st.sidebar.radio(
-    "Select Segment Portfolio:",
-    ["Module A: Tech & Innovation Portfolio", "Module B: Value & Durability Portfolio", "Interactive Cost Calculator", "Book Virtual Test Drive"]
+st.sidebar.title("🚘 Experience Navigation")
+page = st.sidebar.radio(
+    "Select Page:",
+    [
+        "🏠 Home",
+        "ℹ️ About Us",
+        "⚡ Module A: Tech & Innovation (4 Vehicles)",
+        "🛡️ Module B: Value & Durability (4 Vehicles)",
+        "🏎️ Virtual Test Drive Concierge"
+    ]
 )
 
 # ---------------------------------------------------------
-# Module A: Tech & Innovation
+# PAGE 1: HOME
 # ---------------------------------------------------------
-if "Module A" in module_choice:
-    st.subheader("⚡ Module A: The Apex of Innovation & Design")
-    st.caption("Targeting: Technology-Focused, Futuristic Design, ADAS Level 2+, EV Architecture")
+if "Home" in page:
+    st.subheader("Welcome to Kia Next-Gen Mobility")
+    st.markdown("""
+    Explore our dual product portfolio derived directly from consumer perception clusters:
+    - **Module A (Innovation & Style)**: Flagship Electric EVs, Level 3 Autonomous readiness, AR Head-Up Displays.
+    - **Module B (Value & Durability)**: Smartstream High-MPG, Turbo-Hybrids, 10-Year / 100,000-Mile Powertrain Warranty.
+    """)
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image("https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop", caption="Kia EV6 GT (576 HP All-Electric Crossover)")
-        st.markdown("""
-        **Kia EV6 GT Key Specs:**
-        - **0-60 mph**: 3.4 seconds (Dual-Motor e-AWD)
-        - **Charging**: 800V Ultra-Fast (10-80% in 18 Mins)
-        - **Cockpit**: Dual 12.3" Curved Panoramic Displays + AR-HUD
-        """)
-        
+        st.info("⚡ **Module A Highlight**\n\nKia EV6 GT (576 HP, 0-60 in 3.4s) & Kia EV9 Flagship 3-Row SUV.")
     with col2:
-        st.image("https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop", caption="Kia EV9 Flagship 3-Row EV SUV")
-        st.markdown("""
-        **Kia EV9 Key Specs:**
-        - **Autonomy**: Level 3 Autonomous Ready (LIDAR)
-        - **Tech**: Digital Key 2.0 & Over-The-Air Updates
-        - **Range**: 304 Miles Target All-Electric Range
-        """)
+        st.success("🛡️ **Module B Highlight**\n\nKia Seltos (34 MPG) & Sportage Turbo-Hybrid (43 MPG) backed by 10-Yr Warranty.")
 
 # ---------------------------------------------------------
-# Module B: Value & Durability
+# PAGE 2: ABOUT US
 # ---------------------------------------------------------
-elif "Module B" in module_choice:
-    st.subheader("🛡️ Module B: The Masterclass in Value & Durability")
-    st.caption("Targeting: Practical, Reliable, Low Running Cost, 10-Year Powertrain Warranty")
+elif "About Us" in page:
+    st.subheader("ℹ️ About Kia & Kantar Market Research")
+    st.markdown("""
+    ### Dual Portfolio Philosophy
+    Our consumer research study identified two prominent automotive buyer personas:
+    1. **Tech-Forward Pioneers**: Seeking electric powertrains, OTA updates, and Level 2+/3 ADAS safety suites.
+    2. **Endurance Value Champions**: Demanding low total cost of ownership, reliable spare parts networks, and long warranty coverage.
     
-    col1, col2 = st.columns(2)
-    with col1:
-        st.image("https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop", caption="Kia Seltos Smart Value Edition")
-        st.markdown("""
-        **Kia Seltos Highlights:**
-        - **Fuel Economy**: Segment-Best 34 MPG Highway
-        - **Endurance**: Smartstream Engine Longevity Tuning
-        - **Safety**: High-Tensile Steel Crash Cage & 6 Airbags Standard
-        """)
-        
-    with col2:
-        st.image("https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop", caption="Kia Sportage Turbo-Hybrid")
-        st.markdown("""
-        **Kia Sportage Hybrid Highlights:**
-        - **Warranty**: 10-Year / 100,000-Mile Powertrain Protection
-        - **Efficiency**: 43 MPG Combined Efficiency
-        - **Resale**: Top Resale Value Retainer in Class
-        """)
-
-# ---------------------------------------------------------
-# Interactive Calculator
-# ---------------------------------------------------------
-elif "Calculator" in module_choice:
-    st.subheader("🧮 Interactive Total Cost of Ownership Savings Calculator")
-    
-    daily_miles = st.slider("Daily Commute Distance (Miles):", 10, 150, 45)
-    years = st.slider("Ownership Duration (Years):", 3, 10, 5)
-    fuel_type = st.radio("Powertrain Option:", ["Gasoline (28 MPG)", "Turbo-Hybrid (43 MPG)", "All-Electric (110 MPGe)"])
-    
-    mpg_val = 28 if "Gasoline" in fuel_type else (43 if "Hybrid" in fuel_type else 110)
-    annual_miles = daily_miles * 365
-    annual_cost = int((annual_miles / mpg_val) * 3.60)
-    gas_benchmark = int((annual_miles / 25) * 3.60)
-    savings = max(0, (gas_benchmark - annual_cost) * years)
-    
-    st.markdown(f"""
-    ### Projected Financial Savings: **${savings:,}**
-    - **Estimated Annual Fuel/Energy Cost**: `${annual_cost:,}` / year
-    - **Included Warranty Protection Value**: `+$3,500` (10-Yr Coverage)
+    ### The 10-Year Guarantee
+    Every Kia powertrain comes backed by an industry-leading 10-Year / 100,000-Mile Powertrain Warranty.
     """)
 
 # ---------------------------------------------------------
-# Test Drive Lead Capture Form
+# PAGE 3: MODULE A (TECH & INNOVATION)
+# ---------------------------------------------------------
+elif "Module A" in page:
+    st.subheader("⚡ Module A: The Apex of Innovation & Design")
+    st.caption("Featuring 4 Flagship Models + Individual Car Cost Calculators")
+    
+    cars = [
+        {"name": "Kia EV6 GT", "price": "$61,600", "mpge": 110, "maint": 280, "img": "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop", "desc": "576 HP Dual-Motor e-AWD Crossover • 800V Ultra-Fast Charging (10-80% in 18m)"},
+        {"name": "Kia EV9 (3-Row SUV)", "price": "$54,900", "mpge": 102, "maint": 310, "img": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop", "desc": "Level 3 Autonomous Ready • Digital Key 2.0 • 304 Miles Range"},
+        {"name": "Kia EV3 / Concept EV4", "price": "$34,900", "mpge": 125, "maint": 240, "img": "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop", "desc": "Next-Gen Urban EV Fastback • ChatGPT AI Assistant • Bio-Polymer Cockpit"},
+        {"name": "Kia Stinger GT Tribute", "price": "$53,390", "mpge": 25, "maint": 460, "img": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop", "desc": "3.3L Twin-Turbo V6 (368 HP) • Brembo Brakes • Launch Control"}
+    ]
+    
+    for car in cars:
+        with st.expander(f"🏎️ {car['name']} - {car['price']}", expanded=True):
+            c1, c2 = st.columns([1, 1])
+            with c1:
+                st.image(car['img'], caption=car['name'])
+            with c2:
+                st.write(f"**Description**: {car['desc']}")
+                st.write(f"**Base Price**: {car['price']}")
+                
+                # Dedicated Car Calculator
+                miles = st.slider(f"Daily Commute for {car['name']} (Miles):", 10, 120, 40, key=f"sl_{car['name']}")
+                years = st.slider(f"Ownership Duration for {car['name']} (Years):", 3, 7, 5, key=f"yr_{car['name']}")
+                
+                annual_cost = int(((miles * 365) / car['mpge']) * 3.60)
+                savings = int(((((miles * 365) / 25) * 3.60) - annual_cost + (480 - car['maint'])) * years)
+                
+                st.success(f"💰 Estimated {years}-Year Total Savings: **${savings:,}** (Est Energy Cost: ${annual_cost:,}/yr)")
+
+# ---------------------------------------------------------
+# PAGE 4: MODULE B (VALUE & DURABILITY)
+# ---------------------------------------------------------
+elif "Module B" in page:
+    st.subheader("🛡️ Module B: Smart Value & Practical Reliability")
+    st.caption("Featuring 4 High-Efficiency Models + Individual Car Cost Calculators")
+    
+    cars_b = [
+        {"name": "Kia Seltos (Smart Value)", "price": "$24,490", "mpg": 34, "maint": 390, "img": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop", "desc": "Segment-Best 34 MPG Highway • Smartstream Engine • 6 Standard Airbags"},
+        {"name": "Kia Sportage Hybrid", "price": "$28,590", "mpg": 43, "maint": 340, "img": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop", "desc": "43 MPG Combined Efficiency • 227 HP Turbo Hybrid • 10-Yr Powertrain Warranty"},
+        {"name": "Kia Carens / Carnival MPV", "price": "$33,600", "mpg": 26, "maint": 410, "img": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop", "desc": "VIP Lounge Seating • 145 cu ft Cargo • Dual Sunroofs & Power Sliding Doors"},
+        {"name": "Kia Telluride Flagship SUV", "price": "$36,190", "mpg": 26, "maint": 430, "img": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=1200&auto=format&fit=crop", "desc": "3.8L V6 (291 HP / 5,500 lbs Towing) • #1 KBB Best Buy • Heated/Ventilated Rows"}
+    ]
+    
+    for car in cars_b:
+        with st.expander(f"🛡️ {car['name']} - {car['price']}", expanded=True):
+            c1, c2 = st.columns([1, 1])
+            with c1:
+                st.image(car['img'], caption=car['name'])
+            with c2:
+                st.write(f"**Description**: {car['desc']}")
+                st.write(f"**Base Price**: {car['price']}")
+                
+                miles = st.slider(f"Daily Commute for {car['name']} (Miles):", 10, 120, 40, key=f"sl_b_{car['name']}")
+                years = st.slider(f"Ownership Duration for {car['name']} (Years):", 3, 7, 5, key=f"yr_b_{car['name']}")
+                
+                annual_cost = int(((miles * 365) / car['mpg']) * 3.60)
+                savings = int(((((miles * 365) / 25) * 3.60) - annual_cost + (480 - car['maint'])) * years)
+                
+                st.success(f"💰 Estimated {years}-Year Total Savings: **${savings:,}** (Est Fuel Cost: ${annual_cost:,}/yr)")
+
+# ---------------------------------------------------------
+# PAGE 5: VIRTUAL TEST DRIVE
 # ---------------------------------------------------------
 else:
-    st.subheader("📋 Book Priority Virtual Test Drive & Concierge Access")
-    with st.form("test_drive_form"):
+    st.subheader("🏎️ Book Priority Virtual & Dealer Test Drive")
+    with st.form("test_drive_form_page"):
+        car_name = st.selectbox("Select Kia Model:", ["Kia EV6 GT", "Kia EV9", "Kia EV3 / Concept EV4", "Kia Stinger GT", "Kia Seltos", "Kia Sportage Hybrid", "Kia Carens", "Kia Telluride"])
         name = st.text_input("Full Name *")
         email = st.text_input("Email Address *")
-        powertrain = st.selectbox("Preferred Powertrain:", ["All-Electric (EV6 / EV9)", "Turbo-Hybrid (Sportage)", "Gasoline (Seltos)"])
-        submitted = st.form_submit_button("Confirm Virtual Test Drive Request")
+        drive_type = st.radio("Test Drive Format:", ["3D Virtual Cockpit Experience (Online)", "Physical Showroom Test Drive"])
         
+        submitted = st.form_submit_button("Confirm Test Drive Reservation")
         if submitted and name and email:
             st.balloons()
-            st.success(f"🎉 Thank you {name}! Your VIP Virtual Test Drive confirmation has been sent to {email}.")
+            st.success(f"🎉 Thank you {name}! Your test drive reservation for {car_name} has been confirmed. Confirmation details sent to {email}.")

@@ -2,12 +2,17 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Cpu, Eye, Navigation, Sparkles, ShieldAlert, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Zap, Cpu, CheckCircle2, ChevronRight, Calculator, X } from 'lucide-react';
 import { MODULE_A_VEHICLES, ADAS_SIMULATOR_DATA } from '../data/kiaData';
 
 export default function ModuleA({ onOpenModal }) {
   const [activeSimId, setActiveSimId] = useState('blind-spot');
-  const [ambientColor, setAmbientColor] = useState('#06B6D4'); // Cyan default
+  const [ambientColor, setAmbientColor] = useState('#06B6D4');
+  
+  // Car-specific calculator state
+  const [activeCalcCar, setActiveCalcCar] = useState(null);
+  const [calcMiles, setCalcMiles] = useState(40);
+  const [calcYears, setCalcYears] = useState(5);
 
   const activeSim = ADAS_SIMULATOR_DATA.find(s => s.id === activeSimId) || ADAS_SIMULATOR_DATA[0];
 
@@ -20,7 +25,7 @@ export default function ModuleA({ onOpenModal }) {
   ];
 
   return (
-    <div className="space-y-20">
+    <div className="space-y-20 animate-fade">
       
       {/* 1. Vehicle Showcase Section */}
       <section id="vehicles">
@@ -29,10 +34,10 @@ export default function ModuleA({ onOpenModal }) {
             <Zap className="w-3.5 h-3.5" /> High-Performance Electric & Autonomous Lineup
           </div>
           <h2 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
-            Flagship Innovation Models
+            Module A: Tech & Innovation Portfolio
           </h2>
           <p className="text-slate-400 mt-3 text-base sm:text-lg">
-            Built on Kia&apos;s Dedicated Electric Global Modular Platform (E-GMP) with 800V ultra-fast architecture.
+            Flagship all-electric and performance models equipped with 800V ultra-fast architecture and ADAS Level 2+/3 autonomy.
           </p>
         </div>
 
@@ -53,7 +58,7 @@ export default function ModuleA({ onOpenModal }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
                   <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-700 text-xs font-black text-cyan-400">
-                    {car.price}
+                    From {car.price}
                   </div>
                 </div>
 
@@ -88,13 +93,21 @@ export default function ModuleA({ onOpenModal }) {
                 </div>
               </div>
 
-              {/* Action CTA */}
-              <div className="p-6 sm:p-8 pt-0">
+              {/* Action CTAs: Car-Specific Calculator + Test Drive */}
+              <div className="p-6 sm:p-8 pt-0 space-y-3">
+                <button
+                  onClick={() => setActiveCalcCar(car)}
+                  className="w-full py-3 rounded-xl font-bold text-xs text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <Calculator className="w-4 h-4" />
+                  <span>Calculate TCO Savings for {car.name}</span>
+                </button>
+
                 <button
                   onClick={onOpenModal}
                   className="w-full py-3.5 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
                 >
-                  <span>Request Priority Tech Test Drive</span>
+                  <span>Book Priority Test Drive</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -103,7 +116,89 @@ export default function ModuleA({ onOpenModal }) {
         </div>
       </section>
 
-      {/* 2. Interactive ADAS Safety & Smart Cockpit Simulator */}
+      {/* 2. Car-Specific Calculator Drawer Modal */}
+      {activeCalcCar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade">
+          <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-cyan-500/40 relative shadow-2xl">
+            <button
+              onClick={() => setActiveCalcCar(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <Calculator className="w-4 h-4" /> Dedicated Vehicle Savings Calculator
+            </div>
+            <h3 className="font-heading font-black text-2xl text-white mb-1">
+              {activeCalcCar.name}
+            </h3>
+            <p className="text-xs text-slate-400 mb-6">Base Price: {activeCalcCar.price} • {activeCalcCar.mpge} MPGe</p>
+
+            <div className="space-y-5 text-left bg-slate-900/80 p-5 rounded-2xl border border-slate-800 mb-6">
+              <div>
+                <div className="flex justify-between text-xs font-bold text-slate-300 mb-1">
+                  <span>Daily Commute:</span>
+                  <span className="text-cyan-400">{calcMiles} miles / day</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="120"
+                  step="5"
+                  value={calcMiles}
+                  onChange={(e) => setCalcMiles(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-slate-300 mb-1">
+                  <span>Ownership Duration:</span>
+                  <span className="text-cyan-400">{calcYears} Years</span>
+                </div>
+                <input
+                  type="range"
+                  min="3"
+                  max="7"
+                  step="1"
+                  value={calcYears}
+                  onChange={(e) => setCalcYears(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+              </div>
+
+              {/* Calculated Outputs */}
+              <div className="pt-3 border-t border-slate-800 space-y-2">
+                <div className="flex justify-between text-xs text-slate-300">
+                  <span>Est. Annual Energy Cost:</span>
+                  <span className="font-bold text-white">${Math.round(((calcMiles * 365) / activeCalcCar.mpge) * 3.60)}/yr</span>
+                </div>
+                <div className="flex justify-between text-xs text-slate-300">
+                  <span>Maintenance Index:</span>
+                  <span className="font-bold text-emerald-400">${activeCalcCar.maintPerYear}/yr (${480 - activeCalcCar.maintPerYear}/yr savings)</span>
+                </div>
+                <div className="flex justify-between text-sm font-extrabold text-cyan-400 pt-2 border-t border-slate-800">
+                  <span>Total {calcYears}-Yr Estimated Savings:</span>
+                  <span>${Math.round((((calcMiles * 365) / 25) * 3.60 - ((calcMiles * 365) / activeCalcCar.mpge) * 3.60 + (480 - activeCalcCar.maintPerYear)) * calcYears).toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setActiveCalcCar(null);
+                onOpenModal();
+              }}
+              className="w-full py-3 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-cyan-500 to-purple-600"
+            >
+              Get Custom Quote for {activeCalcCar.name}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Interactive ADAS Safety & Smart Cockpit Simulator */}
       <section id="simulator" className="glass-card rounded-3xl p-6 sm:p-10 border border-purple-500/30 relative overflow-hidden">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold text-purple-400 bg-purple-500/10 border border-purple-500/30 uppercase tracking-widest mb-3">

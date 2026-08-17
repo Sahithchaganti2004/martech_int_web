@@ -2,34 +2,36 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Calculator, CheckCircle2, DollarSign, Award, ChevronRight, TrendingUp, ShieldCheck } from 'lucide-react';
+import { Shield, Calculator, CheckCircle2, Award, ChevronRight, X } from 'lucide-react';
 import { MODULE_B_VEHICLES } from '../data/kiaData';
 
 export default function ModuleB({ onOpenModal }) {
-  // Calculator State
-  const [dailyCommute, setDailyCommute] = useState(40); // km/miles per day
-  const [ownershipYears, setOwnershipYears] = useState(5); // 3-7 years
-  const [powertrain, setPowertrain] = useState('hybrid'); // 'gas' | 'hybrid' | 'ev'
+  // Car-specific calculator state
+  const [activeCalcCar, setActiveCalcCar] = useState(null);
+  const [calcMiles, setCalcMiles] = useState(40);
+  const [calcYears, setCalcYears] = useState(5);
 
-  // Live Savings Formula calculations
+  // Overall Calculator State
+  const [dailyCommute, setDailyCommute] = useState(40);
+  const [ownershipYears, setOwnershipYears] = useState(5);
+  const [powertrain, setPowertrain] = useState('hybrid');
+
   const annualMiles = dailyCommute * 365;
   const gasCostPerGallon = 3.60;
-  
-  // Fuel MPG benchmarks
-  const mpgMap = { gas: 28, hybrid: 43, ev: 110 }; // EV MPGe equivalent
+  const mpgMap = { gas: 28, hybrid: 43, ev: 110 };
   const maintenancePerYear = { gas: 420, hybrid: 340, ev: 280 };
 
   const selectedMPG = mpgMap[powertrain];
   const annualFuelCost = Math.round((annualMiles / selectedMPG) * gasCostPerGallon);
-  const baselineGasCost = Math.round((annualMiles / 25) * gasCostPerGallon); // Standard gas SUV benchmark
+  const baselineGasCost = Math.round((annualMiles / 25) * gasCostPerGallon);
   
   const annualSavings = Math.max(0, baselineGasCost - annualFuelCost);
   const totalSavingsOverOwnership = annualSavings * ownershipYears;
   const maintenanceSavings = Math.round((480 - maintenancePerYear[powertrain]) * ownershipYears);
-  const totalFinancialValue = totalSavingsOverOwnership + maintenanceSavings + 3500; // Includes 10-Yr warranty value retention
+  const totalFinancialValue = totalSavingsOverOwnership + maintenanceSavings + 3500;
 
   return (
-    <div className="space-y-20">
+    <div className="space-y-20 animate-fade">
       
       {/* 1. Vehicle Showcase Section */}
       <section id="vehicles">
@@ -38,7 +40,7 @@ export default function ModuleB({ onOpenModal }) {
             <Shield className="w-3.5 h-3.5" /> High-Efficiency & Durable Utility Lineup
           </div>
           <h2 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
-            Smart Value & Reliability Models
+            Module B: Smart Value & Reliability Portfolio
           </h2>
           <p className="text-slate-400 mt-3 text-base sm:text-lg">
             Engineered for long-term endurance with low running expenses and backed by Kia&apos;s 10-Year Warranty.
@@ -62,7 +64,7 @@ export default function ModuleB({ onOpenModal }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
                   <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-700 text-xs font-black text-emerald-400">
-                    {car.price}
+                    From {car.price}
                   </div>
                 </div>
 
@@ -97,13 +99,21 @@ export default function ModuleB({ onOpenModal }) {
                 </div>
               </div>
 
-              {/* Action CTA */}
-              <div className="p-6 sm:p-8 pt-0">
+              {/* Action CTAs: Car-Specific Calculator + Brochure */}
+              <div className="p-6 sm:p-8 pt-0 space-y-3">
+                <button
+                  onClick={() => setActiveCalcCar(car)}
+                  className="w-full py-3 rounded-xl font-bold text-xs text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <Calculator className="w-4 h-4" />
+                  <span>Calculate TCO Savings for {car.name}</span>
+                </button>
+
                 <button
                   onClick={onOpenModal}
                   className="w-full py-3.5 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2"
                 >
-                  <span>Download 10-Yr Warranty & Brochure</span>
+                  <span>Download 10-Yr Warranty Brochure</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -112,14 +122,96 @@ export default function ModuleB({ onOpenModal }) {
         </div>
       </section>
 
-      {/* 2. Interactive Cost-of-Ownership & Savings Calculator */}
+      {/* 2. Car-Specific Calculator Drawer Modal */}
+      {activeCalcCar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade">
+          <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-emerald-500/40 relative shadow-2xl">
+            <button
+              onClick={() => setActiveCalcCar(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <Calculator className="w-4 h-4" /> Dedicated Vehicle Savings Calculator
+            </div>
+            <h3 className="font-heading font-black text-2xl text-white mb-1">
+              {activeCalcCar.name}
+            </h3>
+            <p className="text-xs text-slate-400 mb-6">Base Price: {activeCalcCar.price} • {activeCalcCar.mpg} MPG</p>
+
+            <div className="space-y-5 text-left bg-slate-900/80 p-5 rounded-2xl border border-slate-800 mb-6">
+              <div>
+                <div className="flex justify-between text-xs font-bold text-slate-300 mb-1">
+                  <span>Daily Commute:</span>
+                  <span className="text-emerald-400">{calcMiles} miles / day</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="120"
+                  step="5"
+                  value={calcMiles}
+                  onChange={(e) => setCalcMiles(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs font-bold text-slate-300 mb-1">
+                  <span>Ownership Duration:</span>
+                  <span className="text-emerald-400">{calcYears} Years</span>
+                </div>
+                <input
+                  type="range"
+                  min="3"
+                  max="7"
+                  step="1"
+                  value={calcYears}
+                  onChange={(e) => setCalcYears(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                />
+              </div>
+
+              {/* Calculated Outputs */}
+              <div className="pt-3 border-t border-slate-800 space-y-2">
+                <div className="flex justify-between text-xs text-slate-300">
+                  <span>Est. Annual Fuel Expense:</span>
+                  <span className="font-bold text-white">${Math.round(((calcMiles * 365) / activeCalcCar.mpg) * 3.60)}/yr</span>
+                </div>
+                <div className="flex justify-between text-xs text-slate-300">
+                  <span>Maintenance Index:</span>
+                  <span className="font-bold text-emerald-400">${activeCalcCar.maintPerYear}/yr (${480 - activeCalcCar.maintPerYear}/yr savings)</span>
+                </div>
+                <div className="flex justify-between text-sm font-extrabold text-emerald-400 pt-2 border-t border-slate-800">
+                  <span>Total {calcYears}-Yr Estimated Savings:</span>
+                  <span>${Math.round((((calcMiles * 365) / 25) * 3.60 - ((calcMiles * 365) / activeCalcCar.mpg) * 3.60 + (480 - activeCalcCar.maintPerYear)) * calcYears).toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setActiveCalcCar(null);
+                onOpenModal();
+              }}
+              className="w-full py-3 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-600"
+            >
+              Get Custom Quote for {activeCalcCar.name}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Interactive Cost-of-Ownership & Savings Calculator */}
       <section id="simulator" className="glass-card rounded-3xl p-6 sm:p-10 border border-emerald-500/30 relative overflow-hidden">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 uppercase tracking-widest mb-3">
             <Calculator className="w-3.5 h-3.5" /> Total Cost of Ownership (TCO) Calculator
           </div>
           <h2 className="font-heading font-black text-2xl sm:text-4xl text-white">
-            Calculate Your Ownership Savings
+            Calculate Your Overall Ownership Savings
           </h2>
           <p className="text-slate-400 text-sm sm:text-base mt-2">
             Adjust your daily driving habits below to calculate projected fuel, maintenance, and warranty savings.
@@ -172,11 +264,6 @@ export default function ModuleB({ onOpenModal }) {
                 onChange={(e) => setDailyCommute(Number(e.target.value))}
                 className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-                <span>10 mi</span>
-                <span>60 mi</span>
-                <span>120 mi</span>
-              </div>
             </div>
 
             {/* Ownership Duration Slider */}
@@ -194,11 +281,6 @@ export default function ModuleB({ onOpenModal }) {
                 onChange={(e) => setOwnershipYears(Number(e.target.value))}
                 className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-                <span>3 Years</span>
-                <span>5 Years</span>
-                <span>7 Years (10-Yr Covered)</span>
-              </div>
             </div>
 
           </div>
@@ -222,7 +304,7 @@ export default function ModuleB({ onOpenModal }) {
                   <span className="font-bold text-emerald-400">+${totalSavingsOverOwnership.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-xs sm:text-sm text-slate-300">
-                  <span>Maintenance Index Savings (vs segment avg):</span>
+                  <span>Maintenance Index Savings:</span>
                   <span className="font-bold text-emerald-400">+${maintenanceSavings.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-xs sm:text-sm text-slate-300">

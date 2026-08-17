@@ -23,7 +23,10 @@ export const MODULE_A_VEHICLES = [
     name: "Kia EV6 GT",
     tagline: "576 HP All-Electric High-Performance Crossover",
     image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop",
-    price: "From $61,600",
+    price: "$61,600",
+    mpge: 110,
+    maintPerYear: 280,
+    warranty: "10-Yr / 100k-Mi EV Battery",
     badges: [
       "Dual-Motor e-AWD (0-60 in 3.4s)",
       "800V Ultra-Fast Charging (10-80% in 18 mins)",
@@ -35,14 +38,18 @@ export const MODULE_A_VEHICLES = [
       "Highway Driving Assist 2 (HDA2) ADAS Suite",
       "Meridian 14-Speaker Premium Surround Sound"
     ],
-    accent: "border-cyan-500/50 shadow-cyan-500/20"
+    accent: "border-cyan-500/50 shadow-cyan-500/20",
+    color: "cyan"
   },
   {
     id: "ev9-flagship",
     name: "Kia EV9 (Flagship 3-Row SUV)",
     tagline: "Ultra-Luxury All-Electric SUV with Swivel Lounge Seats",
     image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop",
-    price: "From $54,900",
+    price: "$54,900",
+    mpge: 102,
+    maintPerYear: 310,
+    warranty: "10-Yr / 100k-Mi EV Battery",
     badges: [
       "Level 3 Autonomous Ready (LIDAR)",
       "Digital Key 2.0 Touchless Entry",
@@ -54,7 +61,54 @@ export const MODULE_A_VEHICLES = [
       "304 Miles Target All-Electric Range (EPA)",
       "Ultra-High Tensile Steel Frame Architecture"
     ],
-    accent: "border-purple-500/50 shadow-purple-500/20"
+    accent: "border-purple-500/50 shadow-purple-500/20",
+    color: "purple"
+  },
+  {
+    id: "ev3-concept",
+    name: "Kia EV3 / Concept EV4",
+    tagline: "Next-Gen Compact Electric Fastback & Urban Crossover",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop",
+    price: "$34,900",
+    mpge: 125,
+    maintPerYear: 240,
+    warranty: "10-Yr / 100k-Mi EV Battery",
+    badges: [
+      "Next-Gen Bio-Polymer Eco Interior",
+      "AI Assistant Voice Control & ChatGPT Integration",
+      "300+ Miles Urban Range Target"
+    ],
+    features: [
+      "Minimalist floating center console & sliding table",
+      "Automated Remote Smart Parking Assist 2",
+      "Sustainable recycled ocean plastic trim accents",
+      "Ultra-compact turn radius & responsive dynamic handling"
+    ],
+    accent: "border-pink-500/50 shadow-pink-500/20",
+    color: "pink"
+  },
+  {
+    id: "stinger-tribute",
+    name: "Kia Stinger GT Tribute Edition",
+    tagline: "368 HP Twin-Turbo V6 Grand Tourer Legend",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
+    price: "$53,390",
+    mpge: 25,
+    maintPerYear: 460,
+    warranty: "10-Yr / 100k-Mi Powertrain",
+    badges: [
+      "3.3L Twin-Turbo V6 (368 HP / 376 lb-ft)",
+      "Brembo Brakes & Mechanical Limited Slip Differential",
+      "Exclusive Moonscape Matte Gray Paint"
+    ],
+    features: [
+      "Terracotta Brown Nappa Leather with GT Custom Stitching",
+      "Launch Control & Electronic Variable Exhaust Valve",
+      "Electronically Controlled Suspension Tuning",
+      "19-Inch Matte Black Forged Alloy Wheels"
+    ],
+    accent: "border-cyan-400/50 shadow-cyan-400/20",
+    color: "cyan"
   }
 ];
 
@@ -64,7 +118,10 @@ export const MODULE_B_VEHICLES = [
     name: "Kia Seltos (Smart Value Edition)",
     tagline: "Rugged Versatility & Low Total Cost of Ownership",
     image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop",
-    price: "From $24,490",
+    price: "$24,490",
+    mpg: 34,
+    maintPerYear: 390,
+    warranty: "10-Yr / 100k-Mi Powertrain",
     badges: [
       "Segment-Best 34 MPG Highway",
       "Smartstream Engine Longevity Tuning",
@@ -76,14 +133,18 @@ export const MODULE_B_VEHICLES = [
       "Accessible Genuine Spare Parts Nationwide Network",
       "10.25-inch Touchscreen with Apple CarPlay & Android Auto"
     ],
-    accent: "border-emerald-500/50 shadow-emerald-500/20"
+    accent: "border-emerald-500/50 shadow-emerald-500/20",
+    color: "emerald"
   },
   {
-    id: "carens-hybrid",
-    name: "Kia Sportage / Carens Hybrid",
+    id: "sportage-hybrid",
+    name: "Kia Sportage Turbo-Hybrid",
     tagline: "Maximum Family Space with 43 MPG Combined Efficiency",
     image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop",
-    price: "From $28,590",
+    price: "$28,590",
+    mpg: 43,
+    maintPerYear: 340,
+    warranty: "10-Yr / 100k-Mi Powertrain",
     badges: [
       "10-Year / 100,000-Mile Powertrain Warranty",
       "Top Resale Value Retainer in Class",
@@ -95,7 +156,54 @@ export const MODULE_B_VEHICLES = [
       "Smart Power Tailgate & Multi-Zone Climate",
       "Drive Wise Safety Technology Package"
     ],
-    accent: "border-amber-500/50 shadow-amber-500/20"
+    accent: "border-amber-500/50 shadow-amber-500/20",
+    color: "amber"
+  },
+  {
+    id: "carens-carnival",
+    name: "Kia Carens / Carnival MPV",
+    tagline: "Premium Multi-Utility Vehicle with VIP Slide-Flex Seating",
+    image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+    price: "$33,600",
+    mpg: 26,
+    maintPerYear: 410,
+    warranty: "10-Yr / 100k-Mi Powertrain",
+    badges: [
+      "Best-in-Class 145.1 cu ft Cargo Capacity",
+      "Dual Power Sliding Doors & Dual Sunroofs",
+      "Rear Passenger Voice Control & Quiet Mode"
+    ],
+    features: [
+      "Slide-Flex 2nd-Row Seating & VIP Lounge Option",
+      "12.3-inch Dual Panoramic Displays & Blind-Spot View",
+      "Standard Safe Exit Assist & Rear Cross-Traffic Collision",
+      "Ultra-low depreciation & family utility score"
+    ],
+    accent: "border-teal-500/50 shadow-teal-500/20",
+    color: "teal"
+  },
+  {
+    id: "telluride-flagship",
+    name: "Kia Telluride (Award-Winning SUV)",
+    tagline: "The Benchmark 3-Row Family SUV with 5,500 lbs Towing",
+    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=1200&auto=format&fit=crop",
+    price: "$36,190",
+    mpg: 26,
+    maintPerYear: 430,
+    warranty: "10-Yr / 100k-Mi Powertrain",
+    badges: [
+      "3.8L V6 Engine (291 HP / 5,500 lbs Towing)",
+      "Kelly Blue Book #1 Best Buy Award Winner",
+      "All-Wheel Drive with Lock Mode & Snow Mode"
+    ],
+    features: [
+      "Nappa Leather Seating with Heated & Ventilated Rows",
+      "Head-Up Display & Surround View Monitor",
+      "Self-Leveling Rear Suspension for Towing Stability",
+      "10-Year Powertrain Protection & High Resale Retention"
+    ],
+    accent: "border-emerald-400/50 shadow-emerald-400/20",
+    color: "emerald"
   }
 ];
 
@@ -165,7 +273,7 @@ export const SPEC_MATRIX = [
   {
     metric: "Estimated Annual Maint. Cost",
     ev6: "$280 / Year",
-    ev9: "$320 / Year",
+    ev9: "$310 / Year",
     seltos: "$390 / Year",
     sportage: "$340 / Year"
   }
